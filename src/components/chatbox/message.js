@@ -11,7 +11,7 @@ class Message extends React.Component {
     }
 
     _onClick(){
-        if(this.props.response){
+        if(this.props.payload){
             $(`#${this.props.id}`).modal('show')
         }
     }
@@ -22,12 +22,11 @@ class Message extends React.Component {
         let directions = {left, right};
 
         let direction = directions[this.props.direction] || left;
-        let style = this.props.response? {"cursor": "pointer"} : {};
         
         return (
 
             <div className="d-block mb-2">
-                <div style={style} onClick={this._onClick} className={`${direction.float} d-inline p-2 ${direction.color} text-white w-70 ${direction.rounded}`}>
+                <div style={{"cursor": "pointer"}} onClick={this._onClick} className={`${direction.float} d-inline p-2 ${direction.color} text-white w-70 ${direction.rounded}`}>
                     {this.props.text
                         .split("\n")
                         .map( (t,idx) => (<span key={idx} ><span>{t}</span><br/></span>) )
@@ -35,7 +34,7 @@ class Message extends React.Component {
                 </div>
                 <div className="clearfix"/>
 
-                {this.props.response && 
+                {this.props.payload && 
                 <div id={this.props.id} className="modal fade" tabIndex="-1" role="dialog" aria-labelledby="responseModalLongTitle" aria-hidden="true">
                     <div className="modal-dialog modal-lg" role="document">
                         <div className="modal-content">
@@ -48,7 +47,7 @@ class Message extends React.Component {
                             <div className="modal-body">
                                 <pre>
                                     <code>
-                                        {JSON.stringify(this.props.response.raw, null, 2)}
+                                        {JSON.stringify(this.props.payload, null, 2)}
                                     </code>
                                 </pre>
                             </div>
@@ -70,6 +69,7 @@ class Message extends React.Component {
 Message.propTypes = {
     id: PropTypes.number.isRequired,
     direction: PropTypes.oneOf(['left', 'right']).isRequired,
+    payload: PropTypes.any.isRequired,
     text: PropTypes.string.isRequired
     // onMessageClick: PropTypes.func
 };

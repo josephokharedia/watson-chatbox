@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import BlockUi from 'react-block-ui';
-import {createSetSelectedResponseMessage} from '../../action/actionCreator';
 
 class ChatBox extends React.Component{
 
@@ -46,9 +45,8 @@ class ChatBox extends React.Component{
                     <div id="chatbox" className="pre-scrollable" style={{'minHeight':'500px'}}>
                        {this.props.conversation.map(c => 
                         { 
-                            // let onMessageClick = c.direction === 'right'? this.props.onMessageClick : undefined;
-                            let response = (this.props.responses && this.props.responses.filter(r=>r.id === c.id)[0]) || null;
-                            return (<Message response={response} id={c.id} key={c.id} direction={c.direction} text={c.text}/>);
+                            let text = c.payload.text || c.payload.output.text.join('\n');
+                            return (<Message id={c.id} key={c.id} direction={c.direction} text={text} payload={c.payload}/>);
                         })}
                     </div>
 
@@ -66,26 +64,16 @@ ChatBox.propTypes={
     onMessageClick: PropTypes.func,
     conversation: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number.isRequired,
-        text: PropTypes.string.isRequired,
+        payload: PropTypes.any,
         direction: PropTypes.oneOf(['left','right']).isRequired
     })).isRequired,
-    responses: PropTypes.arrayOf(PropTypes.any)
 }
 const mapStateToProps = state => {
     return {
         blocking: state.status.sending,
         error: state.status.error,
         conversation: state.conversation.map(c => Object.assign({}, c, {direction: c.sender? 'left' : 'right'})),
-        responses: state.responses
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return bindActionCreators(
-        {
-            onMessageClick: createSetSelectedResponseMessage
-        }, dispatch
-    );
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ChatBox);
+export default connect(mapStateToProps)(ChatBox);
