@@ -9,9 +9,10 @@ const App = () => {
                 <ChatBox />
             </div>
             <div className="col-4">
-                <Output />
+                {/* <Output /> */}
             </div>
         </div>
+        
     );
 }
 export default App;

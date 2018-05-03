@@ -1,9 +1,23 @@
 import React from 'react';
+import MessageForm from './messageForm';
+import Message from './message';
+import Reset from './reset';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import BlockUi from 'react-block-ui';
+import {createSetSelectedResponseMessage} from '../../action/actionCreator';
+
 class ChatBox extends React.Component{
-    
+
+    constructor(props){
+        super(props);
+        this.props = props;
+    }
+
     _scrollToBottom(){
         let chatBoxElement = document.querySelector('#chatbox');
-        chatBoxElement.scrollTop = chatBoxElement.scrollHeight; 
+        chatBoxElement.scrollTop = chatBoxElement.scrollHeight;
     }
 
     componentDidMount(){
@@ -17,125 +31,61 @@ class ChatBox extends React.Component{
     render(){
         return (
 
-            <div className="border border-dark rounded px-3 py-3">
-                <h1 className="text-center">Watson Chatbox</h1>
-                <hr/>
-                <div className="mb-2">
-                    <button type="button" className="btn btn-sm btn-outline-secondary">RESET</button>
+            <BlockUi tag="div" blocking={this.props.blocking}>
+                {this.props.error &&
+                <div className="alert alert-danger" role="alert">
+                Technical error! Something went wrong!
                 </div>
-                <div id="chatbox" className="pre-scrollable" style={{'minHeight':'500px'}}>
-                    <div className="d-block mb-2">
-                        <div className="float-left d-inline p-2 bg-primary text-white w-70 rounded-right">Hi, This is a message</div>
-                        <div className="clearfix"/>
+                }
+                <div className="border border-dark rounded px-3 py-3">
+                    <h1 className="text-center">Watson Chatbox</h1>
+                    <hr/>
+
+                    <Reset />
+
+                    <div id="chatbox" className="pre-scrollable" style={{'minHeight':'500px'}}>
+                       {this.props.conversation.map(c => 
+                        { 
+                            // let onMessageClick = c.direction === 'right'? this.props.onMessageClick : undefined;
+                            let response = (this.props.responses && this.props.responses.filter(r=>r.id === c.id)[0]) || null;
+                            return (<Message response={response} id={c.id} key={c.id} direction={c.direction} text={c.text}/>);
+                        })}
                     </div>
-                    <div className="d-block mb-2">
-                        <div className="float-right d-inline p-2 bg-dark text-white w-70 rounded-left">Hello, This is another message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-left d-inline p-2 bg-primary text-white w-70 rounded-right">Hi, This is a message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-right d-inline p-2 bg-dark text-white w-70 rounded-left">Hello, This is another message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-left d-inline p-2 bg-primary text-white w-70 rounded-right">Hi, This is a message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-right d-inline p-2 bg-dark text-white w-70 rounded-left">Hello, This is another message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-left d-inline p-2 bg-primary text-white w-70 rounded-right">Hi, This is a message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-right d-inline p-2 bg-dark text-white w-70 rounded-left">Hello, This is another message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-left d-inline p-2 bg-primary text-white w-70 rounded-right">Hi, This is a message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-right d-inline p-2 bg-dark text-white w-70 rounded-left">Hello, This is another message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-left d-inline p-2 bg-primary text-white w-70 rounded-right">Hi, This is a message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-right d-inline p-2 bg-dark text-white w-70 rounded-left">Hello, This is another message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-left d-inline p-2 bg-primary text-white w-70 rounded-right">Hi, This is a message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-right d-inline p-2 bg-dark text-white w-70 rounded-left">Hello, This is another message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-left d-inline p-2 bg-primary text-white w-70 rounded-right">Hi, This is a message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-right d-inline p-2 bg-dark text-white w-70 rounded-left">Hello, This is another message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-left d-inline p-2 bg-primary text-white w-70 rounded-right">Hi, This is a message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-right d-inline p-2 bg-dark text-white w-70 rounded-left">Hello, This is another message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-left d-inline p-2 bg-primary text-white w-70 rounded-right">Hi, This is a message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-right d-inline p-2 bg-dark text-white w-70 rounded-left">Hello, This is another message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-left d-inline p-2 bg-primary text-white w-70 rounded-right">Hi, This is a message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-right d-inline p-2 bg-dark text-white w-70 rounded-left">Hello, This is another message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-left d-inline p-2 bg-primary text-white w-70 rounded-right">Hi, This is a message</div>
-                        <div className="clearfix"/>
-                    </div>
-                    <div className="d-block mb-2">
-                        <div className="float-right d-inline p-2 bg-dark text-white w-70 rounded-left">Hello, This is another message</div>
-                        <div className="clearfix"/>
-                    </div>
+
+                    <MessageForm />
                 </div>
-                <div>
-                    
-                    <div className="input-group my-4">
-                        <input type="text" className="form-control" placeholder="Type your message here" aria-label="Recipient's username" aria-describedby="basic-addon2"/>
-                        <div className="input-group-append">
-                            <button className="btn btn-outline-primary" type="button">SEND</button>
-                        </div>
-                    </div>
-    
-    
-                </div>
-            </div>
-    
+            </BlockUi>
         );
     }
 }
 
-export default ChatBox;
+
+ChatBox.propTypes={
+    blocking: PropTypes.bool,
+    error: PropTypes.bool,
+    onMessageClick: PropTypes.func,
+    conversation: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        text: PropTypes.string.isRequired,
+        direction: PropTypes.oneOf(['left','right']).isRequired
+    })).isRequired,
+    responses: PropTypes.arrayOf(PropTypes.any)
+}
+const mapStateToProps = state => {
+    return {
+        blocking: state.status.sending,
+        error: state.status.error,
+        conversation: state.conversation.map(c => Object.assign({}, c, {direction: c.sender? 'left' : 'right'})),
+        responses: state.responses
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            onMessageClick: createSetSelectedResponseMessage
+        }, dispatch
+    );
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatBox);
